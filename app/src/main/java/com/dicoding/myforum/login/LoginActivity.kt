@@ -1,11 +1,14 @@
 package com.dicoding.myforum.login
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import com.dicoding.myforum.MainActivity
 import com.dicoding.myforum.R
 import com.dicoding.myforum.databinding.ActivityLoginBinding
+import com.dicoding.myforum.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -23,11 +26,21 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         when(v.id) {
             R.id.btn_login-> {
-                Toast.makeText(this,"Login",Toast.LENGTH_SHORT).show()
+                val username = binding.edtUsername.text.toString()
+                val password = binding.edtPassword.text.toString()
+                login(username, password)
             }
             R.id.tv_createAccount-> {
-                Toast.makeText(this,"Create Account",Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, RegisterActivity::class.java)
+                startActivity(intent)
+                finish()
             }
         }
+    }
+
+    private fun login(username: String, password: String) {
+        val main = Intent(this,MainActivity::class.java)
+        startActivity(main)
+        finish()
     }
 }
