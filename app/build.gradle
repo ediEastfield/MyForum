@@ -53,7 +53,7 @@ dependencies {
 
     //testing
     testImplementation "junit:junit:$junit_version"
-    androidTestImplementation "androidx.test.ext.junit:$androidx_junit_version"
+    androidTestImplementation "androidx.test.ext:junit:$androidx_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
 
     //database
