@@ -16,8 +16,6 @@ class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
 
-    private val login = Intent(this,LoginActivity::class.java)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
@@ -27,16 +25,13 @@ class RegisterActivity : AppCompatActivity() {
             val username = binding.edtUsername.text.toString()
             val password = binding.edtPassword.text.toString()
             val fullname = binding.edtFullName.text.toString()
-            registerViewModel.register(username, password, fullname).observe(this, { register ->
-                if (register != null) {
+
                     Toast.makeText(this,"Register Success",Toast.LENGTH_SHORT).show()
-                    startActivity(login)
-                    finish()
-                }
-            })
+
         }
 
         binding.tvHaveAccount.setOnClickListener {
+            val login = Intent(this,LoginActivity::class.java)
             startActivity(login)
             finish()
         }
