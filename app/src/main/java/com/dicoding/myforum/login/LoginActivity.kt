@@ -12,7 +12,7 @@ import com.dicoding.myforum.register.RegisterActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginActivity : AppCompatActivity(), View.OnClickListener {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
@@ -21,28 +21,17 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnLogin.setOnClickListener(this)
-        binding.tvCreateAccount.setOnClickListener(this)
-    }
-
-    override fun onClick(v: View) {
-        when(v.id) {
-            R.id.btn_login-> {
-                val username = binding.edtUsername.text.toString()
-                val password = binding.edtPassword.text.toString()
-                login(username, password)
-            }
-            R.id.tv_createAccount-> {
-                val intent = Intent(this, RegisterActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
+        binding.btnLogin.setOnClickListener {
+            val username = binding.edtUsername.text.toString()
+            val password = binding.edtPassword.text.toString()
+            val main = Intent(this,MainActivity::class.java)
+            startActivity(main)
+            finish()
         }
-    }
-
-    private fun login(username: String, password: String) {
-        val main = Intent(this,MainActivity::class.java)
-        startActivity(main)
-        finish()
+        binding.tvCreateAccount.setOnClickListener{
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 }
