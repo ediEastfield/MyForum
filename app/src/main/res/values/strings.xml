@@ -5,7 +5,7 @@
     <string name="password">Password</string>
     <string name="login">LOG IN</string>
     <string name="create_account">Create New Account</string>
-    <string name="make_account">Make Your Account</string>
+    <string name="register">Register</string>
     <string name="fullName">FullName</string>
     <string name="sign_up">Sing Up</string>
     <string name="have_account">Already have account? sing in here</string>
