@@ -9,7 +9,9 @@ import com.dicoding.myforum.MainActivity
 import com.dicoding.myforum.R
 import com.dicoding.myforum.databinding.ActivityLoginBinding
 import com.dicoding.myforum.register.RegisterActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityLoginBinding

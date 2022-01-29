@@ -3,44 +3,42 @@ package com.dicoding.myforum.register
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import com.dicoding.myforum.MainActivity
-import com.dicoding.myforum.R
+import android.widget.Toast
+import androidx.activity.viewModels
 import com.dicoding.myforum.databinding.ActivityRegisterBinding
 import com.dicoding.myforum.login.LoginActivity
+import dagger.hilt.android.AndroidEntryPoint
 
-class RegisterActivity : AppCompatActivity(), View.OnClickListener {
+@AndroidEntryPoint
+class RegisterActivity : AppCompatActivity() {
+
+    private val registerViewModel: RegisterViewModel by viewModels()
 
     private lateinit var binding: ActivityRegisterBinding
+
+    private val login = Intent(this,LoginActivity::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnSignUp.setOnClickListener(this)
-        binding.tvHaveAccount.setOnClickListener(this)
-    }
-
-    override fun onClick(v: View) {
-        when(v.id) {
-            R.id.btn_signUp -> {
-                val username = binding.edtUsername.text.toString()
-                val name = binding.edtFullName.text.toString()
-                val password = binding.edtPassword.text.toString()
-                register(username, name, password)
-            }
-            R.id.tv_haveAccount -> {
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
+        binding.btnSignUp.setOnClickListener {
+            val username = binding.edtUsername.text.toString()
+            val password = binding.edtPassword.text.toString()
+            val fullname = binding.edtFullName.text.toString()
+            registerViewModel.register(username, password, fullname).observe(this, { register ->
+                if (register != null) {
+                    Toast.makeText(this,"Register Success",Toast.LENGTH_SHORT).show()
+                    startActivity(login)
+                    finish()
+                }
+            })
         }
-    }
 
-    private fun register(username: String, name: String, password: String) {
-        val main = Intent(this,MainActivity::class.java)
-        startActivity(main)
-        finish()
+        binding.tvHaveAccount.setOnClickListener {
+            startActivity(login)
+            finish()
+        }
     }
 }
