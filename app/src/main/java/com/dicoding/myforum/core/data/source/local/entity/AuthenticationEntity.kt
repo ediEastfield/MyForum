@@ -10,6 +10,10 @@ data class AuthenticationEntity(
 
     @PrimaryKey
     @NonNull
-    @ColumnInfo(name = "token")
-    var token: String
+    @ColumnInfo(name = "refreshToken")
+    var refreshToken: String,
+
+    @NonNull
+    @ColumnInfo(name = "accessToken")
+    var accessToken: String
 )

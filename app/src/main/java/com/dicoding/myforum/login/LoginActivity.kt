@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.dicoding.myforum.MainActivity
 import com.dicoding.myforum.R
 import com.dicoding.myforum.databinding.ActivityLoginBinding
@@ -13,6 +14,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
+
+    private val loginViewModel: LoginViewModel by viewModels()
 
     private lateinit var binding: ActivityLoginBinding
 
@@ -24,13 +27,18 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             val username = binding.edtUsername.text.toString()
             val password = binding.edtPassword.text.toString()
-            val main = Intent(this,MainActivity::class.java)
-            startActivity(main)
-            finish()
+            loginViewModel.login(username, password).observe(this, { login ->
+                if (login != null) {
+                    Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this,MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+            })
         }
         binding.tvCreateAccount.setOnClickListener{
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            val register = Intent(this, RegisterActivity::class.java)
+            startActivity(register)
             finish()
         }
     }

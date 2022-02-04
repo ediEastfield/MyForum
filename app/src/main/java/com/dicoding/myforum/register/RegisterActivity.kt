@@ -22,13 +22,34 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnSignUp.setOnClickListener {
+            val error = "can not be empty"
             val username = binding.edtUsername.text.toString()
+            if (username.isEmpty()) {
+                binding.edtUsername.error = error
+            }
+
             val password = binding.edtPassword.text.toString()
+            if (password.isEmpty()) {
+                binding.edtPassword.error = error
+            }
+
             val fullname = binding.edtFullName.text.toString()
+            if (fullname.isEmpty()) {
+                binding.edtFullName.error = error
+            }
 
-                    Toast.makeText(this,"Register Success",Toast.LENGTH_SHORT).show()
-
+            registerViewModel.register(username, password, fullname).observe(this, { register ->
+                if (register.username.isNotEmpty()) {
+                    Toast.makeText(this, "Register Success", Toast.LENGTH_SHORT).show()
+                    val login = Intent(this, LoginActivity::class.java)
+                    startActivity(login)
+                    finish()
+                } else {
+                    Toast.makeText(this, "Register Failed", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
+
 
         binding.tvHaveAccount.setOnClickListener {
             val login = Intent(this,LoginActivity::class.java)
