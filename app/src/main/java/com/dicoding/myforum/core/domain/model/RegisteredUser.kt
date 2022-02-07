@@ -4,8 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Login(
+data class RegisteredUser(
 
-    val refreshToken: String,
-    val accessToken: String
+    val status: String?,
 ): Parcelable

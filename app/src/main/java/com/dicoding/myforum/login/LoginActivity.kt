@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.dicoding.myforum.MainActivity
-import com.dicoding.myforum.R
+import com.dicoding.myforum.core.data.Resource
 import com.dicoding.myforum.databinding.ActivityLoginBinding
 import com.dicoding.myforum.register.RegisterActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,15 +27,27 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             val username = binding.edtUsername.text.toString()
             val password = binding.edtPassword.text.toString()
-            loginViewModel.login(username, password).observe(this, { login ->
+
+            loginViewModel.login(username, password).observe(this) { login ->
                 if (login != null) {
-                    Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this,MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    when (login) {
+                        is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
+                        is Resource.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            Toast.makeText(this,"Login Success", Toast.LENGTH_SHORT).show()
+                            val main = Intent(this, MainActivity::class.java)
+                            startActivity(main)
+                            finish()
+                        }
+                        is Resource.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            Toast.makeText(this, "${login.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
-            })
+            }
         }
+
         binding.tvCreateAccount.setOnClickListener{
             val register = Intent(this, RegisterActivity::class.java)
             startActivity(register)

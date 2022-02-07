@@ -1,11 +1,10 @@
 package com.dicoding.myforum.core.data.source.remote.network
 
-import com.dicoding.myforum.core.data.source.remote.response.LoginRequest
 import com.dicoding.myforum.core.data.source.remote.response.LoginResponse
+import com.dicoding.myforum.core.data.source.remote.response.LoginRequest
 import com.dicoding.myforum.core.data.source.remote.response.RegisterRequest
-import com.dicoding.myforum.core.data.source.remote.response.RegisteredResponse
+import com.dicoding.myforum.core.data.source.remote.response.RegisteredUserResponse
 import retrofit2.http.Body
-import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface ApiService {
@@ -13,7 +12,7 @@ interface ApiService {
     @POST("users")
     suspend fun register(
         @Body registerRequest: RegisterRequest
-    ) : RegisteredResponse
+    ) : RegisteredUserResponse
 
     @POST("authentications")
     suspend fun login(

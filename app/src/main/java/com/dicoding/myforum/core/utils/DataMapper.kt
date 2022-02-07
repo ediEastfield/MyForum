@@ -1,26 +1,25 @@
 package com.dicoding.myforum.core.utils
 
 import com.dicoding.myforum.core.data.source.local.entity.AuthenticationEntity
-import com.dicoding.myforum.core.data.source.remote.response.AddedUserResponse
 import com.dicoding.myforum.core.data.source.remote.response.DataLoginResponse
-import com.dicoding.myforum.core.domain.model.AddedUser
-import com.dicoding.myforum.core.domain.model.Login
+import com.dicoding.myforum.core.data.source.remote.response.RegisteredUserResponse
+import com.dicoding.myforum.core.domain.model.DataLogin
+import com.dicoding.myforum.core.domain.model.RegisteredUser
 
 object DataMapper {
 
-    fun mapAddedUserResponseToDomain(input: AddedUserResponse) = AddedUser(
-        id = input.id,
-        username = input.username,
-        fullname = input.fullname
+    fun mapRegisteredUserResponseToDomain(input: RegisteredUserResponse) = RegisteredUser (
+        status = input.status
     )
 
-    fun mapLoginEntitiesToDomain(input: AuthenticationEntity) = Login(
+    fun mapLoginResponsesToEntities(input: DataLoginResponse) = AuthenticationEntity(
         refreshToken = input.refreshToken,
         accessToken = input.accessToken
     )
 
-    fun mapLoginResponseToEntities(input: DataLoginResponse) = AuthenticationEntity(
-        accessToken = input.accessToken,
-        refreshToken = input.refreshToken
+    fun mapLoginEntitiesToDomain(input: AuthenticationEntity) = DataLogin(
+        refreshToken = input.refreshToken,
+        accessToken = input.accessToken
     )
+
 }

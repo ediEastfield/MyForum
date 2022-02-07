@@ -38,18 +38,17 @@ class RegisterActivity : AppCompatActivity() {
                 binding.edtFullName.error = error
             }
 
-            registerViewModel.register(username, password, fullname).observe(this, { register ->
-                if (register.username.isNotEmpty()) {
-                    Toast.makeText(this, "Register Success", Toast.LENGTH_SHORT).show()
+            registerViewModel.register(username, password, fullname).observe(this) { register ->
+                if (register.status.equals("success")) {
+                    Toast.makeText(this, "${register.status}", Toast.LENGTH_SHORT).show()
                     val login = Intent(this, LoginActivity::class.java)
                     startActivity(login)
                     finish()
                 } else {
-                    Toast.makeText(this, "Register Failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,"${register.status}", Toast.LENGTH_SHORT).show()
                 }
-            })
+            }
         }
-
 
         binding.tvHaveAccount.setOnClickListener {
             val login = Intent(this,LoginActivity::class.java)

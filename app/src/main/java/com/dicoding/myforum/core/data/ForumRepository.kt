@@ -1,13 +1,11 @@
 package com.dicoding.myforum.core.data
 
-import android.util.Log
 import com.dicoding.myforum.core.data.source.local.LocalDataSource
 import com.dicoding.myforum.core.data.source.remote.RemoteDataSource
 import com.dicoding.myforum.core.data.source.remote.network.ApiResponse
 import com.dicoding.myforum.core.data.source.remote.response.DataLoginResponse
-import com.dicoding.myforum.core.data.source.remote.response.LoginResponse
-import com.dicoding.myforum.core.domain.model.AddedUser
-import com.dicoding.myforum.core.domain.model.Login
+import com.dicoding.myforum.core.domain.model.DataLogin
+import com.dicoding.myforum.core.domain.model.RegisteredUser
 import com.dicoding.myforum.core.domain.repository.IForumRepository
 import com.dicoding.myforum.core.utils.AppExecutors
 import com.dicoding.myforum.core.utils.DataMapper
@@ -23,15 +21,15 @@ class ForumRepository @Inject constructor(
     private val appExecutors: AppExecutors
 ) : IForumRepository {
 
-    override fun register(username: String, password: String, fullname: String): Flow<AddedUser> {
+    override fun register(username: String, password: String, fullname: String): Flow<RegisteredUser> {
         return remoteDataSource.register(username, password, fullname).map {
-            DataMapper.mapAddedUserResponseToDomain(it)
+            DataMapper.mapRegisteredUserResponseToDomain(it)
         }
     }
 
-    override fun login(username: String, password: String): Flow<Resource<Login>> =
-        object : NetworkBoundResource<Login, DataLoginResponse>() {
-            override fun loadFromDB(): Flow<Login> {
+    override fun login(username: String, password: String): Flow<Resource<DataLogin>> =
+        object : NetworkBoundResource<DataLogin, DataLoginResponse>() {
+            override fun loadFromDB(): Flow<DataLogin> {
                 return localDataSource.getAuthentications().map { login ->
                     if (login != null) {
                         DataMapper.mapLoginEntitiesToDomain(login)
@@ -41,17 +39,15 @@ class ForumRepository @Inject constructor(
                 }
             }
 
-            override fun shouldFetch(data: Login?): Boolean =
+            override fun shouldFetch(data: DataLogin?): Boolean =
                 data == null
 
             override suspend fun createCall(): Flow<ApiResponse<DataLoginResponse>> =
                 remoteDataSource.login(username, password)
 
             override suspend fun saveCallResult(data: DataLoginResponse) {
-                val token = DataMapper.mapLoginResponseToEntities(data)
+                val token = DataMapper.mapLoginResponsesToEntities(data)
                 localDataSource.insertToken(token)
             }
-
         }.asFlow()
-
 }

@@ -4,9 +4,8 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class AddedUser(
+data class DataLogin(
 
-    val id: String,
-    val fullname: String,
-    val username: String
+    val refreshToken: String,
+    val accessToken: String
 ): Parcelable
