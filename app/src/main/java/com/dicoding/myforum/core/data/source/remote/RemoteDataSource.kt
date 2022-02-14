@@ -43,33 +43,27 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
-    fun login(username: String, password: String): Flow<ApiResponse<DataLoginResponse>> {
+    fun login(username: String, password: String): Flow<LoginResponse> {
         return flow {
             try {
                 val loginRequest = LoginRequest(password, username)
                 val response = apiService.login(loginRequest)
-                val dataArray = response.data
 
-                if (response.status.equals("success")) {
-                    emit(ApiResponse.Success(dataArray!!))
-                } else {
-                    emit(ApiResponse.Empty)
-                }
-
+                emit(response)
             } catch (e: Exception) {
-                when(e) {
+                when (e) {
                     is IOException -> {
-                        emit(ApiResponse.Error("Network Error"))
+                        emit(LoginResponse(status = "Network Error"))
                     }
                     is HttpException -> {
                         val error = e.response()?.errorBody()!!.charStream().readText()
                         val msg = error.split(",")[1].split(":")[1].split('"')[1]
                         Log.e("RemoteDataSource", error)
                         Log.e("RemoteDataSource", msg)
-                        emit(ApiResponse.Error(msg))
+                        emit(LoginResponse(status = msg))
                     }
                     else -> {
-                        emit(ApiResponse.Error("Unknown Error"))
+                        emit(LoginResponse(status = "Unknown Error"))
                     }
                 }
             }

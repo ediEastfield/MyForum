@@ -8,5 +8,5 @@ data class LoginResponse(
 	val data: DataLoginResponse? = null,
 
 	@field:SerializedName("status")
-	val status: String? = null
+	val status: String
 )

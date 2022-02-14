@@ -12,6 +12,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
 
+    companion object {
+        private const val FIELD_REQUIRED = "Field tidak boleh kosong"
+    }
+
     private val registerViewModel: RegisterViewModel by viewModels()
 
     private lateinit var binding: ActivityRegisterBinding
@@ -22,20 +26,23 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnSignUp.setOnClickListener {
-            val error = "can not be empty"
-            val username = binding.edtUsername.text.toString()
+            val username = binding.edtUsername.text.toString().trim()
+            val password = binding.edtPassword.text.toString().trim()
+            val fullname = binding.edtFullName.text.toString().trim()
+
             if (username.isEmpty()) {
-                binding.edtUsername.error = error
+                binding.edtUsername.error = FIELD_REQUIRED
+                return@setOnClickListener
             }
 
-            val password = binding.edtPassword.text.toString()
             if (password.isEmpty()) {
-                binding.edtPassword.error = error
+                binding.edtPassword.error = FIELD_REQUIRED
+                return@setOnClickListener
             }
 
-            val fullname = binding.edtFullName.text.toString()
             if (fullname.isEmpty()) {
-                binding.edtFullName.error = error
+                binding.edtFullName.error = FIELD_REQUIRED
+                return@setOnClickListener
             }
 
             registerViewModel.register(username, password, fullname).observe(this) { register ->

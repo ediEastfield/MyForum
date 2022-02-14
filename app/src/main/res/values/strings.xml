@@ -9,4 +9,6 @@
     <string name="fullName">FullName</string>
     <string name="sign_up">Sing Up</string>
     <string name="have_account">Already have account? sing in here</string>
+    <string name="access_token">access token</string>
+    <string name="refresh_token">refresh token</string>
 </resources>

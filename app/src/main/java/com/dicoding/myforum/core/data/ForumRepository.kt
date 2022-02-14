@@ -2,9 +2,7 @@ package com.dicoding.myforum.core.data
 
 import com.dicoding.myforum.core.data.source.local.LocalDataSource
 import com.dicoding.myforum.core.data.source.remote.RemoteDataSource
-import com.dicoding.myforum.core.data.source.remote.network.ApiResponse
-import com.dicoding.myforum.core.data.source.remote.response.DataLoginResponse
-import com.dicoding.myforum.core.domain.model.DataLogin
+import com.dicoding.myforum.core.domain.model.Login
 import com.dicoding.myforum.core.domain.model.RegisteredUser
 import com.dicoding.myforum.core.domain.repository.IForumRepository
 import com.dicoding.myforum.core.utils.AppExecutors
@@ -27,27 +25,14 @@ class ForumRepository @Inject constructor(
         }
     }
 
-    override fun login(username: String, password: String): Flow<Resource<DataLogin>> =
-        object : NetworkBoundResource<DataLogin, DataLoginResponse>() {
-            override fun loadFromDB(): Flow<DataLogin> {
-                return localDataSource.getAuthentications().map { login ->
-                    if (login != null) {
-                        DataMapper.mapLoginEntitiesToDomain(login)
-                    } else {
-                        login
-                    }
-                }
+    override fun login(username: String, password: String): Flow<Login> {
+        return remoteDataSource.login(username, password).map { login ->
+            if (login.status == "success") {
+                DataMapper.mapLoginResponseToDomain(login)
+            } else {
+                Login(status = login.status)
             }
+        }
+    }
 
-            override fun shouldFetch(data: DataLogin?): Boolean =
-                data == null
-
-            override suspend fun createCall(): Flow<ApiResponse<DataLoginResponse>> =
-                remoteDataSource.login(username, password)
-
-            override suspend fun saveCallResult(data: DataLoginResponse) {
-                val token = DataMapper.mapLoginResponsesToEntities(data)
-                localDataSource.insertToken(token)
-            }
-        }.asFlow()
 }

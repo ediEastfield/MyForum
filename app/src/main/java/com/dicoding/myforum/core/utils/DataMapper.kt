@@ -1,9 +1,10 @@
 package com.dicoding.myforum.core.utils
 
-import com.dicoding.myforum.core.data.source.local.entity.AuthenticationEntity
 import com.dicoding.myforum.core.data.source.remote.response.DataLoginResponse
+import com.dicoding.myforum.core.data.source.remote.response.LoginResponse
 import com.dicoding.myforum.core.data.source.remote.response.RegisteredUserResponse
 import com.dicoding.myforum.core.domain.model.DataLogin
+import com.dicoding.myforum.core.domain.model.Login
 import com.dicoding.myforum.core.domain.model.RegisteredUser
 
 object DataMapper {
@@ -12,12 +13,12 @@ object DataMapper {
         status = input.status
     )
 
-    fun mapLoginResponsesToEntities(input: DataLoginResponse) = AuthenticationEntity(
-        refreshToken = input.refreshToken,
-        accessToken = input.accessToken
+    fun mapLoginResponseToDomain(input: LoginResponse) = Login(
+        status = input.status,
+        data = mapDataLoginResponsesToDomain(input.data!!)
     )
 
-    fun mapLoginEntitiesToDomain(input: AuthenticationEntity) = DataLogin(
+    private fun mapDataLoginResponsesToDomain(input: DataLoginResponse) = DataLogin(
         refreshToken = input.refreshToken,
         accessToken = input.accessToken
     )
